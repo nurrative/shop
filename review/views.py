@@ -6,20 +6,20 @@ from rest_framework.viewsets import GenericViewSet
 from drf_yasg.utils import swagger_auto_schema
 from .models import Comment, Rating, Favorite
 from .serializers import CommentSerializer, RatingSerializer, FavoriteSerializer
-
+from .permissions import IsAuthor
 
 class CommentsViewSet(mixins.CreateModelMixin,mixins.UpdateModelMixin,
                       mixins.DestroyModelMixin,GenericViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, IsAuthor]
 
 
 class FavoriteViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
                       mixins.DestroyModelMixin, GenericViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAuthor]
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)

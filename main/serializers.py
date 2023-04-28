@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Category, Product
 from review.serializers import CommentSerializer
+from .helpers import send_spam
 
 
 class CategorySerializer(ModelSerializer):
@@ -19,3 +20,8 @@ class ProductSerializer(ModelSerializer):
         rep['rating'] = instance.average_rating
         rep['comments'] = CommentSerializer(instance.comments.all(), many=True, context=self.context).data
         return rep
+
+    def create(self, validated_data):
+        product = super().create(validated_data)
+        send_spam(product)
+        return product
