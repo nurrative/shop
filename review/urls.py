@@ -4,7 +4,7 @@ from .views import CommentsViewSet, FavoriteViewSet, AddRatingAPIView
 
 router = DefaultRouter()
 router.register('comments', CommentsViewSet)
-router.register('favorite', FavoriteViewSet)
+router.register('favorites', FavoriteViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

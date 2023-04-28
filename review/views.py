@@ -21,6 +21,9 @@ class FavoriteViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,
     serializer_class = FavoriteSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
 
 class AddRatingAPIView(APIView):
     permission_classes = [IsAuthenticated,]
@@ -30,6 +33,7 @@ class AddRatingAPIView(APIView):
         ser.is_valid(raise_exception=True)
         ser.save()
         return Response(ser.data, status=201)
+
 
 
 

@@ -5,3 +5,4 @@ djangorestframework
 djangorestframework-simplejwt
 drf_yasg
 Pillow
+django-filter
