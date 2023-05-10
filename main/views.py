@@ -15,10 +15,10 @@ class ProductViewSet(ModelViewSet):
     # search_fields = ('title', 'description')
 
 
-
 class CategoryListCreateAPIView(ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
 
 class CategoryDestroyAPIView(DestroyAPIView):
     queryset = Category.objects.all()
