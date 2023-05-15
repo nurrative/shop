@@ -1,8 +1,10 @@
+from decimal import Decimal, InvalidOperation
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from django.shortcuts import get_object_or_404, redirect
-from .serializers import RegisterUserSerializer
+from .serializers import RegisterUserSerializer, BillingSerializer
 from .models import User
 
 
@@ -21,5 +23,27 @@ class ActivateView(APIView):
         user.activation_code = ''
         user.save()
         return redirect('http://127.0.0.1:8000/api/v1/account/activate/')
+
+
+class TopUpBillingView(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    @swagger_auto_schema(request_body=BillingSerializer())
+    def post(self, request):
+        # {"amount":100}
+        amount = request.data.get("amount")
+        if not amount:
+            return Response("amount is required", status=400)
+
+        try:
+            amount = Decimal(amount)
+        except InvalidOperation:
+            return Response("invalid amount", status=400)
+
+        billing = request.user.billing
+        if billing.top_up(amount):
+            return Response(status=200)
+        return Response("Invalid amount", status=400)
+
         
 
