@@ -12,7 +12,8 @@ class Order(models.Model):
     def total_price(self):
         items = self.items.all()
         if items.exists():
-            return sum([item.product.price*items.quantity for item in items])
+            print(items)
+            return sum([item.product.price*item.quantity for item in items])
         return 0
 
 

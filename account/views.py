@@ -4,7 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from django.shortcuts import get_object_or_404, redirect
-from .serializers import RegisterUserSerializer, BillingSerializer
+from .serializers import RegisterUserSerializer, BillingSerializer, ProfileSerializer
+from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from .models import User
 
 
@@ -46,4 +47,6 @@ class TopUpBillingView(APIView):
         return Response("Invalid amount", status=400)
 
         
-
+class ProfileViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = ProfileSerializer
