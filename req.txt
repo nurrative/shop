@@ -7,3 +7,5 @@ drf_yasg
 Pillow
 django-filter
 drf-writable-nested
+redis
+celery

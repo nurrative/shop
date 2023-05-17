@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .serializers import OrderSerializer
 from .models import Order
-from .utils import *
+from .tasks import *
 
 
 class OrderViewSet(ModelViewSet):
@@ -25,7 +25,8 @@ class OrderViewSet(ModelViewSet):
             order.save()
             send_successful_payment_message(
                 email=order.user.email,
-                order=order
+                total_price=order.total_price,
+                items=[{'title': i.product.title, 'quantity':i.quantity} for i in order.items.all()]
             )
             return Response(status=200)
         send_error_payment_message(
